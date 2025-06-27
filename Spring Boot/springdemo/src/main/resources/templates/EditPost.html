@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Post</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+  <style>
+    body {
+      background-color: #fcefe9;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .container {
+      max-width: 720px;
+      margin-top: 80px;
+      background-color: #fef5f8;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      text-align: center;
+      font-family: 'Brush Script MT', cursive;
+      font-size: 2.2rem;
+      color: #2b2b2b;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .form-control {
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+    }
+
+    .btn-primary {
+      background-color: #ff6b81;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .btn-primary:hover {
+      background-color: #ff4f66;
+    }
+
+    .alert-danger {
+      margin-top: -15px;
+      font-size: 14px;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔙 Back Button -->
+  <button onclick="history.back()" class="btn btn-outline-secondary back-btn">
+    ← Back
+  </button>
+
+  <div class="container">
+    <h2>Edit Your Post</h2>
+
+    <form th:action="@{'/update_post/' + ${post.id}}" th:object="${post}" method="post">
+      <!-- Title -->
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          type="text"
+          th:field="*{title}"
+          class="form-control"
+          id="title"
+          placeholder="Enter title"
+        />
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+      </div>
+
+      <!-- Body -->
+      <div class="form-group">
+        <label for="body">Content</label>
+        <textarea
+          th:field="*{body}"
+          class="form-control"
+          id="body"
+          rows="8"
+          style="white-space: pre-wrap;"
+          placeholder="Write your post here..."
+          required
+        ></textarea>
+      </div>
+
+      <!-- Submit -->
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Update Post</button>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

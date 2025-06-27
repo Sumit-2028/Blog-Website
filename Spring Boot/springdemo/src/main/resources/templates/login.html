@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      background: linear-gradient(to right, #fffbe6, #ffe0b2);
+      color: #333;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: #fdf5e6;
+      color: #02050c;
+      border: none;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(to right, #42a5f5, #478ed1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .form-label {
+      color: #333;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      background-color: #fff8dc;
+      border: 1px solid #ccc;
+      color: #1a1a1a;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    .form-control:focus {
+      border-color: #ffa726;
+      box-shadow: 0 0 0 0.2rem rgba(255, 167, 38, 0.25);
+      background-color: #fff8dc;
+      outline: none;
+    }
+
+    .form-check-label {
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #fbc02d, #f57c00);
+      color: #000;
+      font-weight: bold;
+      padding: 0.7rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      width: 100%;
+      margin-top: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(to right, #f9a825, #ef6c00);
+      color: white;
+    }
+
+    .alert {
+      margin-top: 15px;
+    }
+
+    .links {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .links a {
+      color: #42a5f5;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .links a:hover {
+      color: #1976d2;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.8rem 1.2rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>Log in to Your Account</h1>
+
+    <!-- Success or error messages -->
+    <p th:if="${message}" th:text="${message}" class="alert alert-success text-center"></p>
+    <p class="text-danger text-center" th:if="${error}" th:text="${error}">Invalid username or password</p>
+
+    <!-- Login form -->
+    <form th:action="@{/login}" method="post">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input
+          type="email"
+          class="form-control"
+          id="username"
+          name="username"
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <div class="mb-3 form-check">
+        <input class="form-check-input" type="checkbox" id="remember-me" name="remember-me" />
+        <label class="form-check-label" for="remember-me">Remember me</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Login</button>
+
+      <!-- Extra links -->
+      <div class="links">
+        <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
+        <p>Forgot your password? <a th:href="@{/forgot-password}">Reset it</a></p>
+      </div>
+    </form>
+  </div>
+
+  <!-- Optional JS -->
+  <script src="js/jquery-3.4.1.min.js"></script>
+</body>
+</html>

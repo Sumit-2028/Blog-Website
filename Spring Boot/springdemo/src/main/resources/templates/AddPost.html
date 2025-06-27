@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragment/head :: head}"></head>
+<style>
+  body {
+    background-color: #f9ede5;
+    color: #1a1a1a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .hero_area .bg-box img {
+    opacity: 0.2;
+    filter: grayscale(50%) brightness(50%);
+  }
+
+  .card {
+    background: #fff6f3;
+    color: #1a1a1a;
+    border: 1px solid #f3dbd3;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .card h2 {
+    color: #333;
+    font-weight: bold;
+    font-size: 28px;
+  }
+
+  .form-label {
+    color: #333;
+  }
+
+  .form-control {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    color: #333;
+  }
+
+  .form-control:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+    background-color: #ffffff;
+    color: #000;
+  }
+
+  .btn-primary {
+    background-color: #1976d2;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #1565c0;
+  }
+
+  footer {
+    background-color: #f3dbd3;
+    color: #555;
+  }
+
+  .about_section {
+    padding: 50px 0;
+    background: #f9ede5;
+  }
+
+  ::placeholder {
+    color: #999;
+  }
+
+  .rounded-pill {
+    border-radius: 50rem !important;
+  }
+
+  #editableBody {
+    min-height: 200px;
+    overflow-y: hidden;
+    resize: none;
+  }
+</style>
+</head>
+
+<body class="sub_page">
+
+<!-- Background + Header Section -->
+<div class="hero_area">
+  <div class="bg-box">
+    <img th:src="@{/images/hero-bg.jpg}" alt="Hero Background" />
+  </div>
+  <header th:replace="~{fragment/header :: header}"></header>
+</div>
+
+<!-- Back Button -->
+<button onclick="history.back()" class="btn btn-outline-primary position-fixed top-0 end-0 m-3 z-3">
+  ← Back
+</button>
+
+<!-- Add Post Section -->
+<section class="about_section layout_padding">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="card shadow-lg border-0 rounded-4 p-4 mt-4">
+          <h2 class="text-center mb-4">Add New Post</h2>
+          <form th:action="@{/AddPost}" method="post" th:object="${post}" enctype="multipart/form-data" onsubmit="return prepareForm()">
+            <input type="hidden" id="account" name="account" th:value="${account}" />
+
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input type="text" class="form-control" id="title" name="title" th:field="*{title}" placeholder="Enter post title">
+              <div class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+
+            <!-- Font styling toolbar -->
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+              <select class="form-select w-auto" id="fontSelect">
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+              </select>
+
+              <select class="form-select w-auto" id="fontSizeSelect">
+                <option value="14px">14px</option>
+                <option value="16px" selected>16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+              </select>
+
+              <input type="color" class="form-control form-control-color" id="fontColorPicker" value="#333333" title="Choose font color">
+
+              <div class="btn-group">
+                <button type="button" class="btn btn-outline-dark" onclick="applyStyle('bold')"><b>B</b></button>
+                <button type="button" class="btn btn-outline-dark" onclick="applyStyle('italic')"><i>I</i></button>
+                <button type="button" class="btn btn-outline-dark" onclick="applyStyle('underline')"><u>U</u></button>
+              </div>
+            </div>
+
+            <!-- Rich Text Editor -->
+            <div class="mb-3">
+              <label for="body" class="form-label">Body</label>
+              <div contenteditable="true" id="editableBody" class="form-control" oninput="autoExpand(this)"></div>
+              <input type="hidden" name="body" id="hiddenBody" />
+            </div>
+
+            <!-- Image Upload -->
+            <div class="mb-3">
+              <label for="imageUpload" class="form-label">Attach Image</label>
+              <input type="file" class="form-control" id="imageUpload" name="image" accept="image/*">
+              <div class="mt-2" id="imagePreviewContainer" style="display:none;">
+                <img id="imagePreview" src="#" alt="Image Preview" class="img-fluid rounded mt-2 border" />
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg rounded-pill" onclick="return prepareForm()">Publish Post</button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+<!-- Scripts -->
+<script>
+  function applyStyle(style) {
+    document.execCommand(style, false, null);
+  }
+
+  document.getElementById('fontSelect').addEventListener('change', function () {
+    document.execCommand("fontName", false, this.value);
+  });
+
+  document.getElementById('fontSizeSelect').addEventListener('change', function () {
+    document.getElementById('editableBody').style.fontSize = this.value;
+  });
+
+  document.getElementById('fontColorPicker').addEventListener('input', function () {
+    document.execCommand("foreColor", false, this.value);
+  });
+
+  function prepareForm() {
+    const content = document.getElementById('editableBody').innerHTML.trim();
+    document.getElementById('hiddenBody').value = content;
+
+    // Check if body is empty (to pass @NotBlank)
+    if (content === "" || content === "<br>") {
+      alert("Post body cannot be empty.");
+      return false; // prevent submission
+    }
+
+    return true; // allow form submission
+  }
+
+
+  function autoExpand(el) {
+    el.style.height = 'auto'; // reset height
+    el.style.height = (el.scrollHeight) + "px"; // set new height based on scroll
+  }
+
+  // Show image preview
+  document.getElementById("imageUpload").addEventListener("change", function (event) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      const imgElement = document.getElementById("imagePreview");
+      imgElement.src = reader.result;
+      document.getElementById("imagePreviewContainer").style.display = 'block';
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  });
+</script>
+
+</body>
+
+</html>

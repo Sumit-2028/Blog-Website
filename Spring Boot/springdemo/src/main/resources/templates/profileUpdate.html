@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragment/head :: head}">
+    <!-- Bootstrap CSS (if not already included in fragment/head) -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+  </head>
+
+  <body class="bg-light">
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h2 class="text-center mb-4 text-primary">Update Your Profile</h2>
+
+              <!-- Profile Update Form -->
+              <form th:action="@{/profile/update}" th:object="${account}" method="post">
+                <div class="mb-3">
+                  <label class="form-label">Title</label>
+                  <input type="text" th:field="*{title}" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">First Name</label>
+                  <input type="text" th:field="*{firstName}" class="form-control" required />
+                  <div class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" th:field="*{lastName}" class="form-control" required />
+                  <div class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Date of Birth</label>
+                  <input type="date" th:field="*{dateOfBirth}" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Gender</label>
+                  <select th:field="*{gender}" class="form-select">
+                    <option value="">Select Gender</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Age</label>
+                  <input type="number" th:field="*{age}" class="form-control" />
+                  <div class="text-danger" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" th:field="*{email}" class="form-control" readonly />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="text" th:field="*{password}" class="form-control" />
+                  <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                </div>
+                
+
+                <div class="d-grid mb-3">
+                  <button type="submit" class="btn btn-primary btn-lg">Update Profile</button>
+                </div>
+              </form>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
+
+    <!-- JS (if not included globally) -->
+    <script th:src="@{/js/bootstrap.js}"></script>
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+  </body>
+</html>

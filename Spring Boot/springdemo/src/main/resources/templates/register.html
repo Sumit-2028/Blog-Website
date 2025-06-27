@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      background: linear-gradient(to right, #fefcea, #f1da36);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.15);
+    }
+
+    .text-gradient {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2rem;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+      color: #333;
+    }
+
+    .form-control,
+    .form-select {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #00c6ff;
+      padding: 0.6rem 0.2rem;
+      font-size: 1rem;
+      color: #333;
+      transition: all 0.25s ease;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: #0072ff;
+    }
+
+    .form-control::placeholder {
+      color: #aaa;
+    }
+
+    .position-relative {
+      position: relative;
+    }
+
+    #togglePassword {
+      position: absolute;
+      right: 10px;
+      top: 36px;
+      cursor: pointer;
+      color: #00c6ff;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      font-weight: 600;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      width: 100%;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(to right, #0072ff, #00c6ff);
+      transform: scale(1.03);
+    }
+
+    .signin-text {
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: 0.92rem;
+      color: #555;
+    }
+
+    .profile-pic-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f3f3f3;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.profile-pic-preview:hover {
+  opacity: 0.85;
+}
+
+
+    .signin-text a {
+      color: #0072ff;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .signin-text a:hover {
+      text-decoration: underline;
+      color: #005bb5;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.8rem 1rem;
+      }
+
+      .text-gradient {
+        font-size: 1.5rem;
+      }
+
+      #togglePassword {
+        top: 34px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1 class="text-gradient">Create Your Account</h1>
+
+    <form th:action="@{/register}" method="post" enctype="multipart/form-data" th:object="${account}">
+
+      <!-- 👤 Profile Image Upload + Preview -->
+      <div class="mb-4 text-center">
+        <label for="profileImage">
+          <img id="profilePreview"
+               src="/images/default-profile.png"
+               alt="Profile Picture"
+               class="rounded-circle shadow"
+               style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #f3f3f3; cursor: pointer;">
+        </label>
+        <input type="file" name="profileImage" id="profileImage"
+               class="form-control mt-2 d-none"
+               accept="image/*"
+               onchange="previewImage(event)">
+      </div>
+      
+
+      
+    
+      <!-- First Name -->
+      <div class="mb-3">
+        <label class="form-label">First Name</label>
+        <input type="text" th:field="*{firstName}" class="form-control" placeholder="Enter your first name" />
+      </div>
+    
+      <!-- Last Name -->
+      <div class="mb-3">
+        <label class="form-label">Last Name</label>
+        <input type="text" th:field="*{lastName}" class="form-control" placeholder="Enter your last name" />
+      </div>
+    
+      <!-- Age -->
+      <div class="mb-3">
+        <label class="form-label">Age</label>
+        <input type="number" th:field="*{age}" class="form-control" placeholder="Enter your age" />
+      </div>
+    
+      <!-- DOB -->
+      <div class="mb-3">
+        <label class="form-label">Date Of Birth</label>
+        <input type="date" th:field="*{dateOfBirth}" class="form-control" />
+      </div>
+    
+      <!-- Gender -->
+      <div class="mb-3">
+        <label class="form-label">Gender</label>
+        <select th:field="*{gender}" class="form-select">
+          <option value="" disabled>Select your gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+    
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" th:field="*{email}" class="form-control" placeholder="Enter your email" />
+      </div>
+    
+      <!-- Password -->
+      <div class="mb-3 position-relative">
+        <label class="form-label">Password</label>
+        <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="Enter password" />
+        <i class="fa-solid fa-eye" id="togglePassword"></i>
+      </div>
+    
+      <!-- Submit Button -->
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill">Register</button>
+      </div>
+    
+      <!-- Login Link -->
+      <p class="signin-text mt-3">
+        Already have an account?
+        <a th:href="@{/login}">Login here</a>
+      </p>
+    </form>
+    
+  </div>
+
+  <script>
+    const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("#password");
+    togglePassword.addEventListener("click", function () {
+      const type = password.getAttribute("type") === "password" ? "text" : "password";
+      password.setAttribute("type", type);
+      this.classList.toggle("fa-eye-slash");
+    });
+  </script>
+  <script>
+    function previewImage(event) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        document.getElementById('profilePreview').src = reader.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
+  
+  
+</body>
+</html>
